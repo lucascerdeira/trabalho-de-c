@@ -1,35 +1,107 @@
 #include <stdio.h>
 #include <string.h>
-#include <locale.h>
 #include <stdlib.h>
 #include <time.h>
 
 // Retorna a senha somente com números
 char* PassNumeric(int Size) {
-    char *ramdom_number;
-    time_t seconds = time(NULL);
-    ramdom_number = NULL;
-    ramdom_number = (char *)realloc(ramdom_number, sizeof(char) * Size);
-    srand(seconds * rand());
+    char *random_pass;
+    time_t Time = time(NULL);
+    random_pass = NULL;
+    random_pass = (char *)realloc(random_pass, sizeof(char) * Size);
+    srand(Time * rand());
     for (int i = 0; i < Size; i++) {
-        ramdom_number[i] = 48 + (rand() % 9);
+        random_pass[i] = 48 + (rand() % 10);
     }
-    return ramdom_number;
+    return random_pass;
 }
 
-char* JuntaRaSenha(char *RA, char *Senha, int Size) {
-    char *RaSenha;
-    RaSenha = NULL;
-    RaSenha = (char *)realloc(RaSenha, sizeof(char) * (Size + 8));
-    strcat(RaSenha, RA);
-    strcat(RaSenha, ";");
-    strcat(RaSenha, Senha);
-    strcat(RaSenha, ";");
-    return RaSenha;
+char* PassAlfa(int Size) {
+    int tipo = 0;
+	char *random_pass;
+    time_t seconds = time(NULL);
+    random_pass  = NULL;
+    random_pass = (char *)realloc(random_pass, sizeof(char) * Size);
+    srand(seconds * rand());
+    for (int i = 0; i < Size; i++){
+    	tipo = rand() % 2;
+    	if (tipo == 0) {
+    		random_pass[i] = 65 + (rand() % 26);
+		}
+		else if (tipo == 1) {
+			random_pass[i] = 97 + (rand() % 26);
+		}
+	}
+	return random_pass;
+}
+
+char* PassAlfa1(int Size) {
+    int tipo = 0;
+	char *random_pass;
+    time_t seconds = time(NULL);
+    random_pass  = NULL;
+    random_pass = (char *)realloc(random_pass, sizeof(char) * Size);
+    srand(seconds * rand());
+    for (int i = 0; i < Size; i++){
+    	tipo = rand() % 2;
+    	if (tipo == 0) {
+    		random_pass[i] = 65 + (rand() % 26);
+		}
+		else if (tipo == 1) {
+			random_pass[i] = 48 + (rand() % 10);
+		}
+	}
+	return random_pass;
+}
+
+char* PassAlfa2(int Size) {
+    int tipo = 0;
+	char *random_pass;
+    time_t seconds = time(NULL);
+    random_pass  = NULL;
+    random_pass = (char *)realloc(random_pass, sizeof(char) * Size);
+    srand(seconds * rand());
+    for (int i = 0; i < Size; i++){
+    	tipo = rand() % 3;
+    	if (tipo == 0) {
+    		random_pass[i] = 65 + (rand() % 26);
+		}
+		else if (tipo == 1) {
+			random_pass[i] = 97 + (rand() % 26);
+		}
+		else if (tipo == 2) {
+			random_pass[i] = 48 + (rand() % 10);
+		}
+	}
+	return random_pass;
+}
+
+char* PassGeral(int Size) {
+    char especiais[10] = {43, 45, 95, 64, 42, 38, 61, 36, 37};
+    char *random_pass;
+    int caracter_especial = 0;
+    int tipo = 0;
+    time_t Time = time(NULL);
+    random_pass = NULL;
+    random_pass = (char *)realloc(random_pass, sizeof(char) * Size);
+    srand(Time * rand());
+    for (int i = 0; i < Size; i++) {
+        tipo = rand() % 4;
+        if (tipo == 0) {
+            random_pass[i] = 65 + (rand() % 26);
+        } else if (tipo == 1) {
+            random_pass[i] = 97 + (rand() % 26);
+        } else if (tipo == 2) {
+            random_pass[i] = 48 + (rand() % 10);
+        } else {
+            caracter_especial = rand() % 9;
+            random_pass[i] = especiais[caracter_especial];
+        }
+    }
+    return random_pass;
 }
 
 int main() {
-	setlocale(LC_ALL, "Portuguese");
 	printf("GRUPO 3.\nNOMES: \n");
 	printf("========================\n");
 	printf("André Corradi\n");
@@ -40,16 +112,12 @@ int main() {
     
 	// Var 
 	int Escolha_Usuario, i, Tamanho_Senha;
-    char aux[7];
 
     // Ponteiro que recebe a resposta das funções
     char *Senha;
 
     // Pronteiro que recebe os RAs do arquivo
     char RA[7];
-
-    // Ponteiro que recebe o RA e a Senha já unidos
-    char *Ra_Senha;
 
     // Ponteiro para o arquivo de matriculas
     FILE *MATR_FILE;
@@ -62,7 +130,6 @@ int main() {
     i = 0;
     Tamanho_Senha = 0; 
 	Senha = NULL;
-    Ra_Senha = NULL;
     MATR_FILE = NULL;
     SENHA_FILE = NULL;
 	// Abre os arquivos
@@ -105,37 +172,43 @@ int main() {
             i = 1;
         }
     }
-	i = 0;
 	if( Escolha_Usuario == 1) {
-        while (fscanf(MATR_FILE, "%s\n", aux) != EOF) {
-            i++;
-            strcpy(RA, aux);
+        while (fscanf(MATR_FILE, "%s\n", RA) != EOF) {
             Senha = NULL;
             Senha = PassNumeric(Tamanho_Senha);
-            Ra_Senha = NULL;
-            Ra_Senha = (char *)realloc(Ra_Senha, sizeof(char) * (Tamanho_Senha + 8));
-            Ra_Senha = JuntaRaSenha(RA, Senha, Tamanho_Senha);
-		    fprintf(SENHA_FILE,"%s\n", Ra_Senha);
-            free(Ra_Senha);
+		    fprintf(SENHA_FILE,"%s;%s;\n", RA, Senha);
             free(Senha);
         }
 	} else if (Escolha_Usuario == 2){
-		printf("2\n");
-		
+		while (fscanf(MATR_FILE, "%s\n", RA) != EOF) {
+            Senha = NULL;
+            Senha = PassAlfa(Tamanho_Senha);
+		    fprintf(SENHA_FILE,"%s;%s;\n", RA, Senha);
+            free(Senha);
+        }
 	} else if (Escolha_Usuario == 3) {
-		printf("3\n");
-		
+		while (fscanf(MATR_FILE, "%s\n", RA) != EOF) {
+            Senha = NULL;
+            Senha = PassAlfa1(Tamanho_Senha);
+		    fprintf(SENHA_FILE,"%s;%s;\n", RA, Senha);
+            free(Senha);
+        }
 	} else if (Escolha_Usuario == 4) {
-		printf("mangeur marié\n");
-
+		while (fscanf(MATR_FILE, "%s\n", RA) != EOF) {
+            Senha = NULL;
+            Senha = PassAlfa2(Tamanho_Senha);
+		    fprintf(SENHA_FILE,"%s;%s;\n", RA, Senha);
+            free(Senha);
+        }
 	} else if (Escolha_Usuario == 5) {
-		printf("SUPER XANDÃO\n");
+		while (fscanf(MATR_FILE, "%s\n", RA) != EOF) {
+            Senha = NULL;
+            Senha = PassGeral(Tamanho_Senha);
+		    fprintf(SENHA_FILE,"%s;%s;\n", RA, Senha);
+            free(Senha);
+        }
 	}
-	
-	// TODO dar free() em todos os ponteiros!!!
     fclose(MATR_FILE);
     fclose(SENHA_FILE);
 	return 0;
-	
-	
 }
