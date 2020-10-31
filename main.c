@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <locale.h>
 
 // Retorna a senha somente com números
 char* PassNumeric(int Size) {
@@ -77,7 +78,7 @@ char* PassAlfa2(int Size) {
 }
 
 char* PassGeral(int Size) {
-    char especiais[10] = {43, 45, 95, 64, 42, 38, 61, 36, 37};
+    char especiais[9] = {43, 45, 95, 64, 42, 38, 61, 36, 37};
     char *random_pass;
     int caracter_especial = 0;
     int tipo = 0;
@@ -94,7 +95,7 @@ char* PassGeral(int Size) {
         } else if (tipo == 2) {
             random_pass[i] = 48 + (rand() % 10);
         } else {
-            caracter_especial = rand() % 9;
+            caracter_especial = rand() % 10;
             random_pass[i] = especiais[caracter_especial];
         }
     }
@@ -102,6 +103,7 @@ char* PassGeral(int Size) {
 }
 
 int main() {
+	setlocale(LC_ALL, "Portuguese");
 	printf("GRUPO 3.\nNOMES: \n");
 	printf("========================\n");
 	printf("André Corradi\n");
@@ -117,7 +119,7 @@ int main() {
     char *Senha;
 
     // Pronteiro que recebe os RAs do arquivo
-    char RA[7], aux[7];
+    char RA[7];
 
     // Ponteiro para o arquivo de matriculas
     FILE *MATR_FILE;
@@ -173,10 +175,10 @@ int main() {
         }
     }
 	if( Escolha_Usuario == 1) {
-        while (fscanf(MATR_FILE, "%s\n", aux) != EOF) {
+        while (fscanf(MATR_FILE, "%s\n", RA) != EOF) {
             Senha = NULL;
             Senha = PassNumeric(Tamanho_Senha);
-		    fprintf(SENHA_FILE,"%s;%s;\n", aux, Senha);
+		    fprintf(SENHA_FILE,"%s;%s;\n", RA, Senha);
             free(Senha);
         }
 	} else if (Escolha_Usuario == 2){

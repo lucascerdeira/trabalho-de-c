@@ -1,1 +1,1 @@
-# trabalho-de-c Banin
+# Sistema de senhas desenvolvido em C
