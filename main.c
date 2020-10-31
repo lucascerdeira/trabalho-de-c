@@ -117,7 +117,7 @@ int main() {
     char *Senha;
 
     // Pronteiro que recebe os RAs do arquivo
-    char RA[7];
+    char RA[7], aux[7];
 
     // Ponteiro para o arquivo de matriculas
     FILE *MATR_FILE;
@@ -173,10 +173,10 @@ int main() {
         }
     }
 	if( Escolha_Usuario == 1) {
-        while (fscanf(MATR_FILE, "%s\n", RA) != EOF) {
+        while (fscanf(MATR_FILE, "%s\n", aux) != EOF) {
             Senha = NULL;
             Senha = PassNumeric(Tamanho_Senha);
-		    fprintf(SENHA_FILE,"%s;%s;\n", RA, Senha);
+		    fprintf(SENHA_FILE,"%s;%s;\n", aux, Senha);
             free(Senha);
         }
 	} else if (Escolha_Usuario == 2){
